@@ -66,6 +66,12 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Deploy to Vercel
+
+Import this repository into Vercel and deploy with the included `vercel.json` configuration. It builds the Vite app to `dist`, serves client-side routes through the SPA fallback, and routes `/api/*` requests to the Express API function in `api/[...path].ts`. No environment variables are required for the demo.
+
+The demo API uses an in-memory synthetic data store. Changes are temporary and can be lost when Vercel starts a new serverless instance; connect a persistent database before using this deployment for shared or production data.
+
 ### Option 2: Docker Compose (Full-Stack + PostgreSQL)
 ```bash
 # 1. Copy environment configuration

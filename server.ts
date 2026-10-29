@@ -3,29 +3,29 @@ import { createServer as createViteServer } from 'vite';
 import { db } from './src/server/db';
 import { User } from './src/types';
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+export const app = express();
+const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(express.json());
+app.use(express.json());
 
-  // Default active user session (simulated auth session with role-based access)
-  let currentUser: User = db.getState().users[0]; // Admin by default for local development & demonstration
+// Default active user session (simulated auth session with role-based access)
+let currentUser: User = db.getState().users[0]; // Admin by default for local development & demonstration
 
-  // Middleware helper to authenticate
-  const authenticate = (req: Request, res: Response, next: () => void) => {
-    // Allows switching user via header or session
-    const roleHeader = req.headers['x-user-role'] as string;
-    if (roleHeader) {
-      const found = db.getState().users.find((u) => u.role === roleHeader);
-      if (found) currentUser = found;
-    }
-    (req as any).user = currentUser;
-    next();
-  };
+// Middleware helper to authenticate
+const authenticate = (req: Request, res: Response, next: () => void) => {
+  // Allows switching user via header or session
+  const roleHeader = req.headers['x-user-role'] as string;
+  if (roleHeader) {
+    const found = db.getState().users.find((u) => u.role === roleHeader);
+    if (found) currentUser = found;
+  }
+  (req as any).user = currentUser;
+  next();
+};
 
-  app.use(authenticate);
+app.use(authenticate);
 
+function registerApiRoutes() {
   // ----------------------------------------------------
   // AUTHENTICATION ENDPOINTS
   // ----------------------------------------------------
@@ -411,8 +411,11 @@ async function startServer() {
       syntheticDataMode: true,
     });
   });
+}
 
-  // Mount Vite middleware for React SPA in development
+registerApiRoutes();
+
+async function startServer() {
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: 'spa',
@@ -424,7 +427,9 @@ async function startServer() {
   });
 }
 
-startServer().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  startServer().catch((err) => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  });
+}
