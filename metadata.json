@@ -1,0 +1,6 @@
+{
+  "name": "BhoomiPredict AI",
+  "description": "Predictive Analytics for Land Acquisition Delays — Decision-support platform for infrastructure projects with parcel risk estimation, delay modeling, and intervention recommendations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

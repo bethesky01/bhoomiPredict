@@ -1,0 +1,1324 @@
+# MASTER PROJECT PROMPT: BhoomiPredict AI
+
+## 1. YOUR ROLE
+
+Act as a senior full-stack software architect, Python backend engineer, machine learning engineer, PostgreSQL database designer, UI/UX designer, QA engineer, DevOps engineer, and technical mentor.
+
+Build a complete, intelligent, responsive, functional web application named **BhoomiPredict AI — Predictive Analytics for Land Acquisition Delays**.
+
+This is a serious portfolio and company-demonstration project. Do not create merely a landing page, static dashboard, frontend mockup, or collection of non-functional UI components.
+
+Deliver a runnable application with a connected frontend, backend, PostgreSQL database, machine learning pipeline, REST APIs, authentication, reporting, tests, and deployment documentation.
+
+The application should be easy for a beginner to run locally and understand, but the architecture should follow professional software engineering practices.
+
+Work incrementally, inspect the existing project before making changes, and verify every important integration.
+
+---
+
+## 2. PROBLEM STATEMENT
+
+Land acquisition is a critical activity in infrastructure projects such as highways, railways, metro systems, industrial corridors, airports, power transmission projects, and urban development.
+
+Acquisition delays can arise from:
+
+- Incomplete land ownership documentation.
+- Ownership disputes and multiple claimants.
+- Delays in surveys and land measurements.
+- Pending administrative and legal approvals.
+- Compensation assessment and payment delays.
+- Objections, grievances, and unresolved claims.
+- Delayed possession and handover.
+- Coordination gaps between project departments.
+- Dependencies between parcels and construction activities.
+- Inaccurate schedules and late identification of risks.
+
+Traditional monitoring often relies on spreadsheets, periodic reports, and manual status updates. These approaches may make it difficult to identify high-risk parcels early or understand how individual parcel delays affect an overall project schedule.
+
+BhoomiPredict AI should provide a centralized platform to track land acquisition progress, estimate delay risks, explain contributing factors, prioritize interventions, and generate actionable reports.
+
+### Project objective
+
+Build a decision-support system that answers:
+
+1. Which parcels are most likely to be delayed?
+2. What is the estimated probability of delay?
+3. How many additional days might a parcel require?
+4. What factors contribute to its predicted risk?
+5. Which projects or administrative stages are accumulating delays?
+6. Which interventions should be prioritized?
+7. What could happen to the project schedule if high-risk parcels remain unresolved?
+8. How does actual progress compare with the planned acquisition schedule?
+
+The application must clearly distinguish predictions from confirmed facts and recommendations from legally binding decisions.
+
+---
+
+## 3. IMPORTANT DATA AND ACCURACY POLICY
+
+Use synthetic data for initial development and demonstration.
+
+Generate fictional projects, parcel identifiers, locations, ownership statuses, milestones, approval records, compensation statuses, delays, and outcomes.
+
+Display a persistent but unobtrusive label:
+
+"DEMO MODE — Synthetic data. Predictions are not validated for real-world land acquisition."
+
+Requirements:
+
+- Never represent generated records as official government records.
+- Never invent real landowner identities, property ownership, legal cases, or compensation records.
+- Never claim that the ML model has real-world accuracy without appropriate independent validation.
+- Clearly label all synthetic training metrics.
+- Include a synthetic-data indicator in API responses, reports, and prediction details.
+- Do not make legal, compensation, ownership, or acquisition decisions automatically.
+- Treat predictions as decision-support estimates requiring human review.
+- Do not infer protected or sensitive personal characteristics.
+- Keep personally identifying information out of the synthetic dataset.
+
+The synthetic dataset should include meaningful relationships between acquisition features and generated delay outcomes so that the initial model can demonstrate a realistic development workflow. These relationships must be documented as assumptions rather than discovered real-world patterns.
+
+---
+
+## 4. REQUIRED TECHNOLOGY STACK
+
+Use a Python-oriented stack.
+
+### Frontend
+- React.
+- TypeScript.
+- Vite.
+- Tailwind CSS.
+- A consistent component library or reusable custom components.
+- Recharts for charts.
+- React Router for page navigation.
+- React Hook Form and Zod for form validation.
+- TanStack Query or an equivalent approach for API data fetching and caching.
+- Lucide icons.
+- A map library such as Leaflet with OpenStreetMap-compatible tiles for synthetic parcel visualization.
+
+### Backend
+- Python 3.12 or a compatible supported version.
+- Django and Django REST Framework.
+- Django ORM.
+- Django authentication and permissions.
+- Django REST Framework serializers and viewsets.
+- django-filter for filtering and pagination.
+- django-cors-headers configured securely for local development.
+- Gunicorn for production serving.
+
+### Database
+- PostgreSQL.
+- Django migrations.
+- Appropriate indexes and database constraints.
+- Foreign keys and explicit deletion behavior.
+- Environment-based database configuration.
+
+### Machine learning
+- pandas.
+- NumPy.
+- scikit-learn.
+- joblib.
+- RandomForestClassifier for delay-risk probability.
+- RandomForestRegressor for estimated additional delay days.
+- Pipeline and ColumnTransformer for preprocessing.
+- Explicit train/validation/test separation.
+- Metrics including ROC-AUC where applicable, precision, recall, F1, PR-AUC, MAE, and RMSE.
+- A baseline model for comparison.
+- Model versioning and training metadata.
+- SHAP or a carefully documented alternative for explainability if practical.
+
+### Testing and deployment
+- pytest and pytest-django, or Django's test framework.
+- React component and integration tests using Vitest and React Testing Library.
+- Docker.
+- Docker Compose.
+- PostgreSQL container for local development.
+- GitHub Actions CI.
+- Environment-variable configuration.
+- Deployment instructions for a suitable Python/React hosting environment.
+
+Prefer stable, mutually compatible package versions. Pin versions in dependency files.
+
+Do not introduce unnecessary microservices. Keep the initial architecture understandable and maintainable.
+
+---
+
+## 5. APPLICATION ARCHITECTURE
+
+Use a clear repository structure similar to:
+
+bhoomipredict-ai/
+  frontend/
+    src/
+      api/
+      app/
+      components/
+      features/
+        auth/
+        dashboard/
+        projects/
+        parcels/
+        predictions/
+        analytics/
+        milestones/
+        reports/
+        notifications/
+        settings/
+      hooks/
+      layouts/
+      lib/
+      pages/
+      routes/
+      types/
+      utils/
+    public/
+    package.json
+    vite.config.ts
+    Dockerfile
+
+  backend/
+    config/
+    apps/
+      accounts/
+      projects/
+      parcels/
+      milestones/
+      predictions/
+      analytics/
+      notifications/
+      audit/
+    ml/
+      data_generation.py
+      features.py
+      preprocessing.py
+      train.py
+      predict.py
+      evaluate.py
+      explain.py
+      model_registry.py
+    tests/
+    manage.py
+    requirements.txt
+    Dockerfile
+
+  scripts/
+    seed_demo_data.py
+    reset_demo_data.py
+
+  docs/
+    architecture.md
+    database-schema.md
+    api-reference.md
+    ml-methodology.md
+    synthetic-data.md
+    deployment.md
+    user-guide.md
+
+  docker-compose.yml
+  .env.example
+  .gitignore
+  README.md
+
+You may refine this structure if necessary, but preserve clear separation of responsibilities.
+
+Frontend and backend must be genuinely connected over HTTP through documented APIs.
+
+The frontend must not use hardcoded fake dashboard statistics when backend endpoints are available.
+
+Do not put database access or ML training logic inside React components.
+
+Do not use browser localStorage as the primary database.
+
+Do not expose database credentials or secret keys to the frontend.
+
+---
+
+## 6. USER AUTHENTICATION AND ACCESS CONTROL
+
+Implement functional authentication.
+
+Required functionality:
+
+- Login.
+- Logout.
+- User profile.
+- Session expiration and appropriate handling.
+- Password hashing through Django's authentication system.
+- Protected frontend routes.
+- Backend authorization on every protected resource.
+- CSRF protection when using cookie-based authentication.
+- Secure CORS configuration.
+- Role-based permissions.
+- Audit logging for important modifications.
+
+Provide these roles:
+
+### Administrator
+- Manage users and roles.
+- Manage projects and parcels.
+- Configure application settings.
+- Trigger model training.
+- View model evaluation and system status.
+
+### Project Manager
+- Create and update assigned projects.
+- Manage parcel records and milestones.
+- Run predictions.
+- Review risks and recommended interventions.
+- Generate reports.
+
+### Analyst
+- View authorized project and parcel data.
+- Run permitted analytics.
+- Review model explanations.
+- Export authorized reports.
+
+Use object-level authorization so users cannot access projects or parcels they are not permitted to view.
+
+Create a management command for creating a local demonstration user. Do not automatically expose a privileged demo account in production.
+
+Never ship default credentials as production credentials.
+
+---
+
+## 7. PROJECT MANAGEMENT MODULE
+
+Implement complete CRUD functionality for infrastructure projects.
+
+Each project should include:
+
+- Project name.
+- Project code.
+- Project category.
+- Description.
+- Fictional state and district.
+- Project manager.
+- Planned start date.
+- Planned completion date.
+- Total planned parcels.
+- Project status.
+- Project priority.
+- Budget or acquisition estimate, if configured.
+- Created and updated timestamps.
+
+Example synthetic projects:
+
+- Highway Expansion Project.
+- Metro Corridor Development.
+- Railway Infrastructure Project.
+- Industrial Corridor Project.
+- Power Transmission Corridor.
+
+These must be explicitly labeled fictional.
+
+Features:
+
+- Create, view, edit, and archive projects.
+- Search by project name and code.
+- Filter by project type, district, status, and priority.
+- Paginate results.
+- View project-level analytics.
+- View related parcels and milestones.
+- View aggregate risk distribution.
+- Display planned versus actual progress.
+- View project schedule risk and unresolved blockers.
+
+Project aggregates must be calculated from database records or explicitly documented calculations.
+
+---
+
+## 8. LAND PARCEL MANAGEMENT MODULE
+
+Create a complete parcel management system.
+
+Each parcel should contain:
+
+- Unique parcel code.
+- Related project.
+- Synthetic district and location.
+- Optional latitude and longitude.
+- Parcel area.
+- Acquisition stage.
+- Acquisition status.
+- Documentation completeness percentage.
+- Ownership verification status.
+- Number of pending approvals.
+- Number of recorded disputes or objections.
+- Compensation assessment status.
+- Compensation payment status.
+- Survey status.
+- Planned acquisition start date.
+- Planned possession date.
+- Actual possession date.
+- Critical-path importance.
+- Responsible department.
+- Last review date.
+- Internal notes.
+- Created and updated timestamps.
+
+Use enums or validated choices for statuses.
+
+Possible acquisition stages:
+
+1. Identification.
+2. Survey.
+3. Ownership Verification.
+4. Valuation and Compensation.
+5. Approval.
+6. Award.
+7. Possession.
+8. Handover.
+9. Completed.
+
+Features:
+
+- Add a parcel.
+- Edit a parcel.
+- View a parcel detail page.
+- Search by parcel code.
+- Filter by project, stage, risk, and status.
+- Sort by predicted risk and overdue duration.
+- Paginate large datasets.
+- Validate all inputs on both frontend and backend.
+- Display a complete parcel history.
+- Provide CSV export.
+- Support bulk import from a documented CSV template with row-level validation and an error report.
+- Prevent accidental duplicate parcel codes within a project.
+- Provide an explicit confirmation before destructive operations.
+
+All records must be persisted in PostgreSQL.
+
+---
+
+## 9. MILESTONE AND TIMELINE MODULE
+
+Implement a real milestone tracking system.
+
+Each milestone should include:
+
+- Related project.
+- Related parcel, when applicable.
+- Milestone name.
+- Description.
+- Planned start and completion dates.
+- Actual start and completion dates.
+- Status.
+- Responsible department.
+- Dependency information.
+- Blocker description.
+- Notes.
+- Update history.
+
+Features:
+
+- Create, edit, and complete milestones.
+- Display planned versus actual timelines.
+- Highlight overdue milestones.
+- Show milestone dependencies.
+- Calculate milestone lateness from stored dates.
+- Provide a chronological timeline for every parcel.
+- Track status changes.
+- Identify dependencies affecting downstream activities.
+- Calculate critical-path impact using documented assumptions.
+
+Do not equate every late milestone with an equal delay in project completion. Account for dependencies, available schedule float where supplied, and uncertainty.
+
+If full critical-path scheduling is implemented, document its algorithm and assumptions.
+
+---
+
+## 10. MACHINE LEARNING PIPELINE
+
+Build a real, executable machine-learning pipeline using scikit-learn.
+
+### Synthetic data generation
+
+Generate a reproducible dataset with a configurable number of fictional parcel observations.
+
+Include features such as:
+
+- Current acquisition stage.
+- Days spent in the current stage.
+- Days until planned possession.
+- Documentation completeness.
+- Ownership verification status.
+- Pending approvals.
+- Dispute count.
+- Compensation status.
+- Survey completion status.
+- Critical-path importance.
+- Number of overdue milestones.
+- Historical stage transition duration, when available.
+- Project category.
+- District category.
+
+Generate two targets:
+
+1. `delay_occurred`: binary classification target.
+2. `actual_delay_days`: non-negative regression target.
+
+Clearly document the synthetic rules used to generate both targets.
+
+Use realistic ranges and controlled randomness. Make data generation reproducible with a fixed random seed.
+
+Do not accidentally use target-derived information as a feature.
+
+### Preprocessing
+
+Use scikit-learn Pipeline and ColumnTransformer.
+
+- Impute missing numerical values.
+- Impute missing categorical values.
+- Scale numerical features only when needed.
+- One-hot encode categorical features.
+- Ensure training and inference use exactly the same preprocessing.
+- Save the entire fitted pipeline rather than separately fitted transformations.
+
+### Training
+
+Create a training command such as:
+
+python manage.py train_model --samples 5000 --seed 42
+
+Training must:
+
+- Generate or load the training dataset.
+- Split data into training, validation, and test sets.
+- Use stratified splitting for classification when appropriate.
+- Prevent leakage between related observations when grouping is meaningful.
+- Train a simple baseline.
+- Train a Random Forest classifier.
+- Train a Random Forest regressor.
+- Compare performance with the baseline.
+- Save model artifacts and metadata.
+- Record the dataset generation version.
+- Record training time and model version.
+- Save evaluation metrics.
+- Report feature names and model limitations.
+- Fail clearly if training data is invalid or insufficient.
+
+Use a chronological or group-aware evaluation strategy if historical or repeated observations make random splitting misleading.
+
+### Classification metrics
+
+Calculate and store:
+
+- ROC-AUC when defined.
+- Precision.
+- Recall.
+- F1-score.
+- PR-AUC where applicable.
+- Confusion matrix.
+- Class distribution.
+
+### Regression metrics
+
+Calculate and store:
+
+- Mean Absolute Error.
+- Root Mean Squared Error.
+- Median Absolute Error where useful.
+- Error distribution and residual diagnostics.
+
+Display synthetic-data evaluation metrics only with a clear warning that they are not real-world accuracy estimates.
+
+### Prediction service
+
+Implement an inference service that accepts a validated parcel feature record and returns:
+
+- Delay probability between 0 and 1.
+- Delay probability percentage.
+- Risk category.
+- Estimated additional delay in days.
+- Model version.
+- Prediction timestamp.
+- Data quality warnings.
+- Top contributing factors.
+- Synthetic-data indicator.
+- Human-readable disclaimer.
+
+Use a documented threshold configuration for Low, Medium, High, and Critical risk.
+
+Make the thresholds configurable and show their values in model settings.
+
+A probability is not a certainty. Do not describe predicted delay days as guaranteed outcomes.
+
+Do not train a new model during every API request. Train separately and load the approved artifact for inference.
+
+Provide a documented fallback when the artifact is missing or incompatible. Never silently return fabricated predictions.
+
+---
+
+## 11. EXPLAINABLE AI
+
+Every prediction should explain why the parcel received its risk estimate.
+
+Examples of potentially relevant factors:
+
+- Low documentation completeness.
+- Ownership verification incomplete.
+- Multiple pending approvals.
+- Recorded disputes.
+- Overdue milestones.
+- Compensation assessment incomplete.
+- Limited time before planned possession.
+- High critical-path importance.
+
+Implement explanations using SHAP when compatible with the model, or a carefully documented model-based alternative.
+
+Important:
+
+- Do not present generic rules as if they were genuine SHAP explanations.
+- Label rule-based explanations separately from model-derived explanations.
+- Do not imply causality from feature importance.
+- Explain the direction and limitations of the explanation.
+- Include a feature-level contribution visualization where practical.
+- Display the model version and prediction date.
+
+---
+
+## 12. RISK PRIORITIZATION AND RECOMMENDATION ENGINE
+
+Create a recommendation engine that translates detected risk factors into suggested next actions.
+
+Examples:
+
+If documentation completeness is low:
+"Review missing documentation and assign an officer to resolve outstanding records."
+
+If ownership verification is incomplete:
+"Schedule an ownership verification review."
+
+If approvals are pending:
+"Review the approval queue and identify the responsible authority."
+
+If disputes are recorded:
+"Refer the case for authorized review and track the next procedural milestone."
+
+If compensation assessment is incomplete:
+"Review valuation and compensation assessment progress."
+
+If a critical-path parcel is at high risk:
+"Escalate the schedule impact to the project manager."
+
+Each recommendation must include:
+
+- Related parcel.
+- Detected issue.
+- Recommended action.
+- Priority.
+- Reason.
+- Assigned user or department, if available.
+- Due date.
+- Status.
+- Creation timestamp.
+- Completion timestamp.
+
+Features:
+
+- Create recommendations from prediction results.
+- Prevent duplicate open recommendations for the same issue.
+- Allow users to assign and update recommendations.
+- Mark actions as open, in progress, blocked, or completed.
+- Track resolution time.
+- Re-run predictions after material changes.
+- Compare risk before and after interventions.
+
+Never claim an intervention caused a risk reduction without appropriate evidence.
+
+---
+
+## 13. DASHBOARD AND ANALYTICS
+
+Create a polished executive dashboard backed by real API data.
+
+### KPI cards
+
+Show:
+
+- Total projects.
+- Total parcels.
+- Completed parcels.
+- Parcels currently delayed.
+- High-risk parcels.
+- Critical-risk parcels.
+- Overdue milestones.
+- Open recommendations.
+- Overall acquisition progress.
+- Model status.
+
+Each metric must have a documented definition.
+
+### Charts
+
+Implement:
+
+- Parcel risk distribution.
+- Acquisition stage distribution.
+- Project-wise risk comparison.
+- Planned versus actual progress.
+- Monthly milestone completion trends.
+- Delay duration distribution.
+- Department-wise outstanding actions.
+- Top high-risk projects.
+- Risk by acquisition stage.
+- Prediction confidence or uncertainty indicators where supported.
+
+Add useful filters:
+
+- Project.
+- District.
+- Project category.
+- Acquisition stage.
+- Risk category.
+- Date range.
+
+Ensure filters actually affect API requests and displayed data.
+
+Provide loading, empty, and error states for every chart.
+
+Do not hardcode chart values.
+
+---
+
+## 14. GIS MAP MODULE
+
+Implement an interactive map with synthetic parcel coordinates.
+
+Features:
+
+- Display parcel markers.
+- Color markers by risk category.
+- Filter markers by project and acquisition stage.
+- Click a marker to open the parcel summary.
+- Navigate from a marker to parcel details.
+- Show a risk legend.
+- Display aggregate high-risk counts.
+- Support map zoom and pan.
+
+Use fictional coordinates in a clearly labeled demonstration area.
+
+Do not display generated points as verified land boundaries.
+
+Do not scrape or fabricate cadastral boundaries.
+
+Use OpenStreetMap-compatible tile services in accordance with their terms and attribution requirements.
+
+Provide a useful fallback if map tiles cannot load.
+
+---
+
+## 15. REPORTING AND EXPORTS
+
+Implement working reports.
+
+Required reports:
+
+- Project summary.
+- Parcel risk register.
+- High-risk parcel report.
+- Overdue milestone report.
+- Open recommendation report.
+- Planned versus actual progress report.
+- Model evaluation report.
+- Synthetic-data methodology report.
+
+Support:
+
+- CSV export.
+- Excel export if practical.
+- PDF report generation.
+- Date-range filters.
+- Project filters.
+- Risk-level filters.
+- Export timestamps.
+- Synthetic-data warning on all demonstration reports.
+
+Use the same authorization rules for reports as for normal API requests.
+
+Exports must be generated from actual database records.
+
+Prevent spreadsheet formula injection in exported CSV cells.
+
+---
+
+## 16. NOTIFICATIONS AND AUDIT LOGS
+
+Implement an in-app notification system.
+
+Generate notifications for:
+
+- A parcel entering a configured high-risk category.
+- A parcel becoming overdue.
+- A milestone deadline being missed.
+- A recommendation being assigned.
+- A recommendation reaching its due date.
+
+Prevent notification spam by using clear deduplication rules.
+
+Users should be able to view and mark notifications as read.
+
+Implement an audit log for important changes:
+
+- User.
+- Action.
+- Object type and identifier.
+- Timestamp.
+- Relevant before/after changes where appropriate.
+- Request context where safe.
+
+Do not store passwords, authentication tokens, or sensitive secrets in audit logs.
+
+---
+
+## 17. REST API REQUIREMENTS
+
+Create a versioned REST API under `/api/v1/`.
+
+Provide documented endpoints similar to:
+
+Authentication:
+- POST `/api/v1/auth/login/`
+- POST `/api/v1/auth/logout/`
+- GET `/api/v1/auth/me/`
+
+Projects:
+- GET `/api/v1/projects/`
+- POST `/api/v1/projects/`
+- GET `/api/v1/projects/{id}/`
+- PATCH `/api/v1/projects/{id}/`
+- DELETE or archive `/api/v1/projects/{id}/`
+
+Parcels:
+- GET `/api/v1/parcels/`
+- POST `/api/v1/parcels/`
+- GET `/api/v1/parcels/{id}/`
+- PATCH `/api/v1/parcels/{id}/`
+- DELETE or archive `/api/v1/parcels/{id}/`
+
+Milestones:
+- CRUD `/api/v1/milestones/`
+
+Predictions:
+- POST `/api/v1/parcels/{id}/predict/`
+- GET `/api/v1/parcels/{id}/predictions/`
+- GET `/api/v1/predictions/{id}/`
+- GET `/api/v1/models/status/`
+- GET `/api/v1/models/metrics/`
+
+Analytics:
+- GET `/api/v1/analytics/dashboard/`
+- GET `/api/v1/analytics/risk-distribution/`
+- GET `/api/v1/analytics/project-comparison/`
+- GET `/api/v1/analytics/progress/`
+
+Recommendations:
+- CRUD `/api/v1/recommendations/`
+
+Notifications:
+- GET `/api/v1/notifications/`
+- PATCH `/api/v1/notifications/{id}/read/`
+
+Reports:
+- GET `/api/v1/reports/risk.csv`
+- POST `/api/v1/reports/pdf/` if asynchronous PDF generation is implemented.
+
+Add filtering, ordering, pagination, input validation, meaningful HTTP status codes, and consistent error responses.
+
+Generate OpenAPI documentation and a browsable API interface where practical.
+
+Never expose stack traces or secrets in production API responses.
+
+All prediction requests must validate feature values and reject invalid input.
+
+All write operations must be authenticated and authorized.
+
+---
+
+## 18. FRONTEND DESIGN REQUIREMENTS
+
+Build a modern, professional SaaS-style interface suitable for demonstrating the project to a technology company.
+
+### Visual direction
+
+Use:
+
+- Deep navy or charcoal navigation.
+- White or light neutral content backgrounds.
+- Green accents inspired by land and infrastructure.
+- Amber for medium risk.
+- Red for high or critical risk.
+- Consistent typography.
+- Clean spacing.
+- Rounded cards.
+- Subtle borders and shadows.
+- Clear data hierarchy.
+- Responsive layouts.
+- Accessible color contrast.
+- Consistent iconography.
+
+Avoid excessive gradients, distracting animations, and generic AI-themed decorations.
+
+### Main layout
+
+Desktop:
+- Collapsible left sidebar.
+- Top navigation bar.
+- Main content area.
+- Breadcrumbs.
+- Global project selector.
+- Search.
+- Notification indicator.
+- User profile menu.
+
+Mobile:
+- Responsive navigation drawer.
+- Stacked KPI cards.
+- Scrollable tables or appropriate card alternatives.
+- Touch-friendly controls.
+
+### Required pages
+
+1. Login page.
+2. Overview dashboard.
+3. Projects list.
+4. Create project form.
+5. Project detail page.
+6. Parcels list.
+7. Create/edit parcel form.
+8. Parcel detail page.
+9. Prediction analysis page.
+10. Risk analytics page.
+11. Interactive GIS map.
+12. Milestone timeline.
+13. Recommendation/action center.
+14. Notifications page.
+15. Reports and exports page.
+16. Model monitoring and evaluation page.
+17. User management page for administrators.
+18. Settings page.
+19. Not-found page.
+20. Unauthorized/access-denied page.
+
+### Parcel detail page
+
+Show:
+
+- Parcel information.
+- Acquisition stage.
+- Planned and actual dates.
+- Risk score.
+- Risk category.
+- Estimated delay.
+- Contributing factors.
+- Milestone timeline.
+- Open recommendations.
+- Previous predictions.
+- Audit history.
+
+Add a "Run Prediction" button that calls the backend and displays the actual returned result.
+
+### User experience
+
+Every button must perform a meaningful action.
+
+Every form must validate input.
+
+Every table must load real data.
+
+Every page must have loading, error, empty, and success states where relevant.
+
+Provide success/error messages.
+
+Prevent accidental double submissions.
+
+Do not implement fake navigation, placeholder buttons, hardcoded charts, or mock API calls in the final integrated application.
+
+Synthetic demonstration records are allowed, but they must come from the backend and PostgreSQL.
+
+---
+
+## 19. DATABASE DESIGN
+
+Design normalized Django models for:
+
+- User/profile and role assignment.
+- Project.
+- Parcel.
+- Milestone.
+- Milestone dependency.
+- Prediction record.
+- Model version and evaluation metadata.
+- Recommendation.
+- Notification.
+- Audit log.
+- Import job and import error records, if bulk import is implemented.
+
+Use appropriate relationships, indexes, constraints, timestamps, and validation.
+
+Important rules:
+
+- Parcel codes must be unique within the appropriate project scope.
+- Historical predictions must be preserved rather than overwritten.
+- Predictions must reference the model version that produced them.
+- Completed milestones must retain actual completion dates.
+- Deleted or archived projects must not silently corrupt historical reports.
+- Prevent unauthorized cross-project access.
+- Use database transactions for multi-record operations.
+- Add indexes for commonly filtered fields.
+- Document retention and deletion behavior.
+
+Generate migrations and verify that the schema can be created from a clean database.
+
+---
+
+## 20. TESTING AND QUALITY ASSURANCE
+
+Write automated tests for backend, frontend, database integration, and ML functionality.
+
+Backend tests:
+- Authentication.
+- Role permissions.
+- Object-level authorization.
+- Project CRUD.
+- Parcel CRUD.
+- Validation failures.
+- Duplicate parcel prevention.
+- Milestone operations.
+- Prediction persistence.
+- Missing model artifact handling.
+- Synthetic-data warnings.
+- CSV export.
+- Unauthorized cross-project access.
+- API filtering and pagination.
+
+Machine learning tests:
+- Deterministic data generation.
+- Feature schema validation.
+- No target leakage.
+- Pipeline training.
+- Artifact loading.
+- Inference output ranges.
+- Probability validity.
+- Non-negative delay predictions.
+- Model version metadata.
+- Small or invalid dataset handling.
+
+Frontend tests:
+- Login form validation.
+- Protected routing.
+- Dashboard loading.
+- API error handling.
+- Parcel creation and editing.
+- Prediction result display.
+- Risk filter behavior.
+- Responsive critical components.
+
+Integration tests:
+- Create a project.
+- Create a parcel.
+- Train or load a model.
+- Request a prediction.
+- Save the prediction.
+- Retrieve prediction history.
+- Generate a report.
+
+Use PostgreSQL for database integration testing where practical.
+
+Never mark a test as passing unless it was actually executed.
+
+---
+
+## 21. SECURITY REQUIREMENTS
+
+Implement:
+
+- Environment-based secrets.
+- Strong production secret keys.
+- Secure password handling.
+- CSRF protection.
+- Appropriate CORS restrictions.
+- Backend permission checks.
+- Input validation.
+- ORM-based database access.
+- Rate limiting for sensitive endpoints where practical.
+- Secure cookie settings in production.
+- HTTPS deployment.
+- File upload size limits and CSV validation.
+- Safe export handling.
+- Dependency updates and vulnerability checks.
+- Restricted model-training permissions.
+- Error logging without secrets.
+
+Set DEBUG off in production.
+
+Do not commit `.env` files.
+
+Include `.env.example` with placeholders only.
+
+Do not claim the application is security-audited without a real audit.
+
+---
+
+## 22. PERFORMANCE AND MAINTAINABILITY
+
+Implement:
+
+- Database pagination.
+- Efficient querysets with select_related and prefetch_related where appropriate.
+- Indexed filtering fields.
+- Avoidance of N+1 queries.
+- Cached dashboard calculations where justified.
+- Asynchronous jobs for expensive operations if needed.
+- Efficient model loading.
+- Separation of training and inference.
+- Centralized error handling.
+- Type-safe frontend API clients.
+- Reusable UI components.
+- Clear naming conventions.
+- Logging and health checks.
+
+Keep the initial implementation practical for a student developer and a small development team.
+
+Do not over-engineer the application with Kubernetes, microservices, or a message broker unless there is a demonstrated need.
+
+---
+
+## 23. DEMONSTRATION DATA
+
+Create a deterministic synthetic-data seeding command.
+
+For example:
+
+python manage.py seed_demo_data --projects 5 --parcels 200 --seed 42
+
+The seed process should create:
+
+- Fictional projects.
+- Fictional parcel records.
+- Varied acquisition stages.
+- Completed and pending milestones.
+- Different documentation completeness values.
+- Different approval counts.
+- Fictional compensation statuses.
+- Recorded synthetic disputes.
+- Some overdue milestones.
+- Different risk profiles.
+- Initial recommendations where appropriate.
+
+The seed command must be idempotent or clearly document how to reset the demonstration database.
+
+Do not use real personal data.
+
+Include synthetic coordinates suitable for the demonstration map.
+
+Ensure the dashboard has useful information immediately after setup.
+
+---
+
+## 24. LOCAL DEVELOPMENT EXPERIENCE
+
+A beginner should be able to run the project using Docker Compose.
+
+Expected commands:
+
+1. Copy `.env.example` to `.env`.
+2. Configure development environment variables.
+3. Run `docker compose up --build`.
+4. Apply migrations.
+5. Seed synthetic data.
+6. Train the model.
+7. Open the frontend in a browser.
+
+Provide separate backend and frontend commands for developers who do not want to use Docker.
+
+Include troubleshooting for:
+
+- PostgreSQL connection failures.
+- Port conflicts.
+- Missing dependencies.
+- Migration failures.
+- Missing ML artifacts.
+- Frontend API configuration.
+- CORS and CSRF problems.
+- Docker startup issues.
+
+Include a complete README with installation, usage, testing, model training, and deployment instructions.
+
+Do not assume an existing database or pre-trained artifact.
+
+---
+
+## 25. DEPLOYMENT
+
+Provide a reproducible deployment setup.
+
+Use Docker for local development and deployment packaging.
+
+Include:
+
+- Frontend production build.
+- Backend production server.
+- PostgreSQL connection configuration.
+- Environment variables.
+- Database migrations.
+- Static asset handling.
+- Health-check endpoints.
+- Logging.
+- Backup guidance.
+- HTTPS and domain configuration guidance.
+- CI pipeline.
+- Deployment instructions for a compatible cloud host.
+
+Do not put production database passwords in source code.
+
+Do not expose PostgreSQL publicly unless explicitly required and appropriately secured.
+
+Do not claim deployment has succeeded unless an actual deployment has been completed and verified.
+
+If cloud deployment credentials or infrastructure are unavailable, deliver the deployment configuration and clearly state that deployment remains to be performed.
+
+---
+
+## 26. IMPLEMENTATION WORKFLOW
+
+Follow these phases.
+
+### Phase 1: Inspect and plan
+- Inspect the available repository and files.
+- Identify the development environment and available tools.
+- Present the proposed architecture and implementation checklist.
+- Identify any missing prerequisites.
+- Do not overwrite existing work without checking it.
+
+### Phase 2: Project foundation
+- Create frontend and backend applications.
+- Configure PostgreSQL.
+- Configure environment variables.
+- Add Docker Compose.
+- Create initial models and migrations.
+- Implement health checks.
+
+### Phase 3: Core business modules
+- Authentication and permissions.
+- Projects.
+- Parcels.
+- Milestones.
+- Database-backed APIs.
+- Synthetic-data seeding.
+
+### Phase 4: Machine learning
+- Synthetic data generation.
+- Preprocessing.
+- Baseline model.
+- Classifier and regressor.
+- Evaluation.
+- Model artifacts and metadata.
+- Inference service.
+- Prediction history.
+- Explanations and recommendations.
+
+### Phase 5: Frontend
+- Authentication.
+- Dashboard.
+- Projects and parcels.
+- Prediction analysis.
+- Analytics and maps.
+- Milestones and recommendations.
+- Reports and settings.
+
+### Phase 6: Integration
+- Connect every page to the real API.
+- Verify forms and filters.
+- Verify authentication and authorization.
+- Verify predictions persist in PostgreSQL.
+- Verify exports contain actual records.
+
+### Phase 7: Testing and refinement
+- Run backend tests.
+- Run frontend tests.
+- Run database integration tests.
+- Fix all observed failures.
+- Check responsive layouts.
+- Check empty, loading, and error states.
+- Review security and documentation.
+
+### Phase 8: Delivery
+- Produce the complete source code.
+- Produce setup instructions.
+- Produce architecture documentation.
+- Produce API documentation.
+- Produce ML methodology documentation.
+- Produce a synthetic-data disclaimer.
+- Produce deployment instructions.
+- Report the actual verification status.
+
+Do not stop after generating the initial scaffold.
+
+If the development environment has limited execution time or output capacity, implement the project in coherent, runnable phases, preserve existing work, and continue until all required functionality is implemented or any remaining limitations are explicitly documented.
+
+---
+
+## 27. DEFINITION OF DONE
+
+The project is complete only when the following conditions are satisfied or explicitly identified as unverified:
+
+1. The repository contains all required source files.
+2. The application starts using the documented local setup.
+3. PostgreSQL migrations succeed on a clean database.
+4. Synthetic data can be generated.
+5. A model can be trained successfully.
+6. Model artifacts can be loaded for inference.
+7. A user can authenticate.
+8. An authorized user can create and edit projects.
+9. An authorized user can create and edit parcels.
+10. A prediction can be requested through the API.
+11. Predictions are persisted and can be retrieved historically.
+12. The dashboard loads real backend statistics.
+13. Parcel risk factors and recommendations are displayed.
+14. Milestone records and overdue calculations work.
+15. Reports export actual database data.
+16. Authorization prevents access to unauthorized records.
+17. Frontend and backend tests are present and executable.
+18. Docker configuration is present and tested if Docker is available.
+19. Setup and troubleshooting instructions are complete.
+20. Synthetic data and unvalidated ML outputs are labeled correctly.
+21. No core workflow depends on hardcoded frontend mock values.
+22. No production deployment or real-world model accuracy is claimed without verification.
+
+---
+
+## 28. REQUIRED FINAL DELIVERABLES
+
+At completion, provide:
+
+1. A complete project directory.
+2. All frontend source files.
+3. All backend source files.
+4. Database models and migrations.
+5. REST API implementation.
+6. Synthetic-data generator and seeding command.
+7. ML training and inference scripts.
+8. Model evaluation and explanation functionality.
+9. All frontend pages and reusable components.
+10. Authentication and role-based access control.
+11. Automated tests.
+12. Dockerfiles and Docker Compose.
+13. `.env.example`.
+14. README.
+15. API documentation.
+16. Architecture and database documentation.
+17. ML methodology and limitations documentation.
+18. Deployment instructions.
+19. A list of commands actually executed.
+20. Test results and known limitations.
+21. A clear statement identifying what is implemented, what was tested, what failed, and what remains unverified.
+
+Use readable, modular, commented code where it helps beginners understand important concepts.
+
+Avoid unnecessary abstractions and placeholder implementations.
+
+If a requested feature cannot be completed, explain exactly what is missing instead of presenting a non-functional stub as completed work.
+
+Start by inspecting the environment, proposing the implementation plan, and then build BhoomiPredict AI as a complete, integrated application.
